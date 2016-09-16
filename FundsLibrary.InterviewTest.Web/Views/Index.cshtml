@@ -1,0 +1,44 @@
+﻿@model PagedList.IPagedList<FundsLibrary.InterviewTest.Web.Models.FundManagerModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+<div class="fund-managers">
+    <h1>Fund Managers</h1>   
+
+    <div class="row">
+        <table class="table-striped sm-col-4">
+            <thead>
+                <tr>
+                    <th width="40px;"></th>
+                    <th width="300px;">
+                        @Html.ActionLink("Fund Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+                    </th>
+                    <th width="40px;"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var fundMgr in Model)
+                {
+                    <tr>
+                        <td><span class="glyphicon glyphicon-user"></span></td>
+                        <td>@Html.ActionLink(fundMgr.Name, "Details", new { Id = fundMgr.Id })</td>
+                        <td><a href="@Url.Action("Delete", new {Id = fundMgr.Id})" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    <br/>
+
+    @Html.ActionLink("Add Fund Manager", "Add", null, new { @class = "btn btn-default" })
+
+</div>
+
+
