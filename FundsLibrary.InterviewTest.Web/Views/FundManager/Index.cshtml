@@ -1,4 +1,7 @@
-﻿@model IEnumerable<FundsLibrary.InterviewTest.Web.Models.FundManagerModel>
+﻿@model PagedList.IPagedList<FundsLibrary.InterviewTest.Web.Models.FundManagerModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 
 <div class="fund-managers">
     <h1>Fund Managers</h1>   
@@ -8,7 +11,9 @@
             <thead>
                 <tr>
                     <th width="40px;"></th>
-                    <th width="300px;">Fund Name</th>
+                    <th width="300px;">
+                        @Html.ActionLink("Fund Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+                    </th>
                     <th width="40px;"></th>
                 </tr>
             </thead>
@@ -26,7 +31,12 @@
             </tbody>
         </table>
     </div>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
     <br/>
+
     @Html.ActionLink("Add Fund Manager", "Add", null, new { @class = "btn btn-default" })
 
 </div>
