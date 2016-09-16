@@ -11,7 +11,7 @@ namespace FundsLibrary.InterviewTest.Web.Repositories
     public interface IFundManagerModelRepository
     {
         Task<Boolean> Delete(Guid id);
-        Task<IEnumerable<FundManagerModel>> GetAll();
+        Task<IEnumerable<FundManagerModel>> GetAll(string sortOrder, int? page);
         Task<FundManagerModel> Get(Guid id);
         Task<Guid> Put(FundManagerModel content);
         Task<Guid> Post(FundManagerModel content);
@@ -32,9 +32,19 @@ namespace FundsLibrary.InterviewTest.Web.Repositories
             _toModelMapper = toModelMapper ?? new ToFundManagerModelMapper();
         }
 
-        public async Task<IEnumerable<FundManagerModel>> GetAll()
+        public async Task<IEnumerable<FundManagerModel>> GetAll(string sortOrder, int? page)
         {
             var managers = await _client.GetAndReadFromContentGetAsync<IEnumerable<FundManager>>("api/FundManager/");
+
+            if (sortOrder == "fund_desc")
+            {
+                managers = managers.OrderByDescending(s => s.Name);
+            }
+            else
+            { 
+                managers = managers.OrderBy(s => s.Name);
+            }
+            
             return managers.Select(s => _toModelMapper.Map(s));
         }
 

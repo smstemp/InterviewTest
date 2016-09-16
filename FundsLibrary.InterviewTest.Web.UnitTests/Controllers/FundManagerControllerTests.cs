@@ -18,10 +18,10 @@ namespace FundsLibrary.InterviewTest.Web.UnitTests.Controllers
         {
             var mock = new Mock<IFundManagerModelRepository>();
             var fundManagerModels = new FundManagerModel[0].AsEnumerable();
-            mock.Setup(m => m.GetAll()).Returns(Task.FromResult(fundManagerModels));
+            mock.Setup(m => m.GetAll("fund_asc",1)).Returns(Task.FromResult(fundManagerModels));
             var controller = new FundManagerController(mock.Object);
 
-            var result = await controller.Index();
+            var result = await controller.Index("fund_desc", 1);
 
             Assert.That(result, Is.TypeOf<ViewResult>());
             mock.Verify();
