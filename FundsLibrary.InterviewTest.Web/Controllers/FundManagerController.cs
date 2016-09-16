@@ -2,12 +2,14 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using FundsLibrary.InterviewTest.Web.Repositories;
+using PagedList;
 
 namespace FundsLibrary.InterviewTest.Web.Controllers
 {
     public class FundManagerController : Controller
     {
         private readonly IFundManagerModelRepository _repository;
+        private const int PAGE_SIZE = 4;
 
         // ReSharper disable once UnusedMember.Global
         public FundManagerController()
@@ -20,9 +22,15 @@ namespace FundsLibrary.InterviewTest.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string sortOrder, int? page)
         {
-            return View(await _repository.GetAll());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "fund_desc" : "";
+
+            int pageNumber = (page ?? 1);
+
+            var list = await _repository.GetAll(sortOrder, pageNumber);
+            return View(list.ToPagedList(pageNumber, PAGE_SIZE));
         }
 
         [HttpGet]
