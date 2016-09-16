@@ -29,7 +29,7 @@ namespace FundsLibrary.InterviewTest.Web.UnitTests.Repositories
                 mockServiceClient.Object,
                 mockToFundManagerModelMapper.Object);
 
-            var result = await repository.GetAll();
+            var result = await repository.GetAll("fund_asc", 1);
 
             mockToFundManagerModelMapper.Verify();
             mockServiceClient.Verify();
